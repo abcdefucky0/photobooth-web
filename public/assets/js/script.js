@@ -1,4 +1,9 @@
 
+//============ API CONFIG ============
+const API_BASE = 'http://127.0.0.1:8000/api';
+let sessionId = null;
+
+
         // ========== STATE ==========
         let currentStep = 1;
         let totalSteps = 7;
@@ -234,4 +239,50 @@
         }
 
         // Init
-        generateBarcode();
+generateBarcode();
+        
+
+
+//========= PAYMENT ==============
+async function confirmPayment() {
+    const btn = document.querySelector('#step1 .btn-primary');
+    btn.disabled = true;
+    btn.textContent = '⏳ Memproses...'
+
+
+    try {
+        //1. buat sesyon
+        const sessionRes = await fetch(`${API_BASE}/sessions`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        const sessionData = await sessionRes.json();
+        sessionId = sessionData.data.id;
+
+        //2. Buat Payemment
+        await fetch(`${API_BASE}/payments`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                booth_session_id: sessionId,
+                method: 'qris',
+                amount: 20000
+            }),
+        });
+
+        //3 Confrim Pembayaran
+        await fetch(`${API_BASE}/payments/${sessionId}/confirm`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        showToast('✅', 'Pembayaran dikonfirmasi!');
+        nextStep(2);
+
+    } catch (err) {
+        btn.disabled = false;
+        btn.textContent = ' Sudah Bayar💸 ';
+        showToast('❌', 'Terjadi kesalahan', err.message);
+        console.error(err);
+    }
+}

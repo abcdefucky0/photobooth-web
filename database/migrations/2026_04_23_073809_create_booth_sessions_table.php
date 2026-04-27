@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('booth_sessions', function (Blueprint $table) {
             $table->id();
-            $table->string('session-code')->unique();
+            $table->string('session_code')->unique();
             $table->foreignId('template_id')->nullable()->constrained('templates')->nullOnDelete();
             $table->enum('status', ['waiting_payment', 'active', 'completed', 'expired'])->default('waiting_payment');
             $table->timestamp('started_at')->nullable();

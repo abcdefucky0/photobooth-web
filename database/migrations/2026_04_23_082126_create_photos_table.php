@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('booth_session_id')->constrained('booth_sessions')->cascadeOnDelete();
+            $table->string('file_path');
+            $table->integer('order')->default(1);
             $table->timestamps();
         });
     }

@@ -122,7 +122,7 @@
                         <span class="pm-badge pm-qris">QRIS</span>
                         <span class="pm-badge pm-cash">CASH</span>
                     </div>
-                    <button class="btn btn-primary btn-full" onclick="nextStep(2)">
+                    <button class="btn btn-primary btn-full" onclick="confirmPayment()">
                         ✅ Sudah Bayar
                     </button>
                 </div>
